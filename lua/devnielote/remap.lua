@@ -9,3 +9,13 @@ vim.keymap.set("n","n", "nzzzv")
 vim.keymap.set("n","N", "Nzzzv")
 vim.keymap.set("x","<leader>p", "\"_dP");
 vim.keymap.set("n","<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+
+vim.keymap.set("n", "<leader>r", function() require("devnielote.runner").run_current_file() end,
+  { desc = "Run current file in terminal" })
+
+vim.keymap.set("n", "<leader>R", function() require("devnielote.runner").run_custom() end,
+  { desc = "Run custom command in terminal" })
+
+vim.keymap.set("n", "<leader>t", function() require("devnielote.runner").toggle_term() end,
+  { desc = "Toggle runner terminal" })
+

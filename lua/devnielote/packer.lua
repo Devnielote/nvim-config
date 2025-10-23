@@ -12,17 +12,13 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
-  use ({
-    'ellisonleao/gruvbox.nvim',
-     as = "gruvbox",
-     config = function ()
-      vim.cmd('colorscheme gruvbox')
-      vim.o.background = "dark"
-     end
-  })
+  -- Temas 
+  use "EdenEast/nightfox.nvim"
+  use "rebelot/kanagawa.nvim"
+
 
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-  use "nvim-lua/plenary.nvim" -- don't forget to add this one if you don't have it yet!
+  use "nvim-lua/plenary.nvim"
   use {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
@@ -30,15 +26,22 @@ return require('packer').startup(function(use)
   }
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
+
   -- LSP Nativo
-  use "williamboman/mason.nvim"
+use "williamboman/mason.nvim"
+use({
+  "neovim/nvim-lspconfig",
+})
+
   use "williamboman/mason-lspconfig.nvim"
-  use "neovim/nvim-lspconfig"
 
   use "hrsh7th/nvim-cmp"
   use "hrsh7th/cmp-nvim-lsp"
   -- Snippets
-  use "L3MON4D3/LuaSnip"
+  use({
+    "L3MON4D3/LuaSnip",
+    run ="make install_jsregexp"
+  })
   -- Vimwiki
   use 'vimwiki/vimwiki'
 
@@ -63,8 +66,11 @@ return require('packer').startup(function(use)
   }
 }
 
-  -- Linters
-  use "nvimtools/none-ls.nvim"
+  use({
+  "nvimtools/none-ls.nvim",
+  requires = { "nvim-lua/plenary.nvim" },
+})
+
 
   -- Errores mejor ordenados
   use "folke/trouble.nvim"
