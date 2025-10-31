@@ -1,0 +1,3 @@
+-- require("error-lens").setup({
+--   merge_diagnostic = true,
+-- })

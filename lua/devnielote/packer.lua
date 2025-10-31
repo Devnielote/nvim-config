@@ -12,14 +12,14 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
-  use ({
-    'ellisonleao/gruvbox.nvim',
-     as = "gruvbox",
-     config = function ()
-      vim.cmd('colorscheme gruvbox')
-      vim.o.background = "dark"
-     end
-  })
+  use {
+    "catppuccin/nvim", as = 'catppuccin'
+  }
+
+  use {
+    "rebelot/kanagawa.nvim"
+  }
+
 
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
   use "nvim-lua/plenary.nvim" -- don't forget to add this one if you don't have it yet!
@@ -65,9 +65,26 @@ return require('packer').startup(function(use)
 
   -- Linters
   use "nvimtools/none-ls.nvim"
+  use 'kylechui/nvim-surround'
 
   -- Errores mejor ordenados
   use "folke/trouble.nvim"
+
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+        require('Comment').setup()
+    end
+  }
+
+  use {
+  "Redoxahmii/json-to-types.nvim",
+  config = function()
+    require("json-to-types").setup({})
+  end
+}
+
+  use 'MunifTanjim/prettier.nvim'
 
 end)
 
