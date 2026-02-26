@@ -1,40 +1,61 @@
--- lsp config (optimizado RAM)
+-- lsp.lua (optimizado y sin duplicados)
+
+-- Evita doble carga de este archivo
+if vim.g.__lsp_configured then return end
+vim.g.__lsp_configured = true
+
+-- ---- PATH para AppImage/WSL2 (go y gopls) -------------------------------
+vim.env.PATH = table.concat({
+  vim.env.PATH or "",
+  vim.fn.expand("$HOME/go/bin"),
+  "/usr/local/go/bin",
+}, ":")
+
+-- ---- Reqs base -----------------------------------------------------------
 local ok_lsp, lspconfig = pcall(require, "lspconfig")
 if not ok_lsp then return end
 
 local util = require("lspconfig.util")
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- Mason
+-- Capacidades base (nvim-cmp)
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+-- Desactivar semantic tokens (evita crash y ahorra RAM)
+capabilities.textDocument.semanticTokens = nil
+
+-- Handler global defensivo (por si algún server los intenta usar)
+vim.lsp.handlers['textDocument/semanticTokens/full']  = function() end
+vim.lsp.handlers['textDocument/semanticTokens/range'] = function() end
+vim.lsp.handlers['workspace/semanticTokens/refresh']  = function() end
+
+-- ---- Mason ---------------------------------------------------------------
 local mason_ok, mason = pcall(require, "mason")
 if mason_ok then mason.setup() end
 
 local mlsp_ok, mason_lsp = pcall(require, "mason-lspconfig")
 if mlsp_ok then mason_lsp.setup({}) end
 
--- Detectar nombre del server TS disponible (nuevo: ts_ls; viejo: tsserver)
+-- ---- Detección TS (tsserver vs ts_ls) -----------------------------------
 local TS_NAME
 if lspconfig.ts_ls then
   TS_NAME = "ts_ls"
 elseif lspconfig.tsserver then
   TS_NAME = "tsserver"
 else
-  TS_NAME = "tsserver" -- fallback
+  TS_NAME = "tsserver"
 end
 
--- Raíces por proyecto
+-- ---- Raíces por proyecto -------------------------------------------------
 local angular_root = util.root_pattern("angular.json", "nx.json")
 local ts_root      = util.root_pattern("package.json", "tsconfig.json", ".git")
+local go_root      = util.root_pattern("go.work", "go.mod", ".git")
 
--- Límites globales
-local NODE_MEM_LIMIT = "--max-old-space-size=1024" -- puedes probar 768/1536 según tu equipo
+-- ---- Límites y flags -----------------------------------------------------
+local NODE_MEM_LIMIT = "--max-old-space-size=1024" -- ajusta 768/1536 si quieres
 local lsp_flags = { debounce_text_changes = 300 }
 
--- Keymaps + recortes de capacidades (semantic tokens off)
-local on_attach = function(_, bufnr)
-  -- Desactivar semantic tokens (ahorra RAM con TS/Angular)
-  local client = vim.lsp.get_client_by_id(vim.lsp.get_active_clients({ bufnr = bufnr })[1].id)
-  if client and client.server_capabilities and client.server_capabilities.semanticTokensProvider then
+-- ---- on_attach (keymaps + defensa semantic) ------------------------------
+local on_attach = function(client, bufnr)
+  if client and client.server_capabilities then
     client.server_capabilities.semanticTokensProvider = nil
   end
 
@@ -46,32 +67,26 @@ local on_attach = function(_, bufnr)
   vim.keymap.set('n','<leader>ca', vim.lsp.buf.code_action, o)
 end
 
--- Lista de servidores deseados (usa el TS detectado)
-local servers = { TS_NAME, "lua_ls", "pyright", "html", "cssls", "tailwindcss", "angularls" }
-if mlsp_ok then
-  mason_lsp.setup({ ensure_installed = servers })
-end
-
--- Función segura para hacer setup en cualquier versión
+-- ---- Util para setup seguro ---------------------------------------------
 local function safe_setup(server, opts)
   local entry = lspconfig[server]
   if not entry then return end
   if type(entry) == "table" and type(entry.setup) == "function" then
     local ok = pcall(entry.setup, opts)
-    if not ok then
-      vim.notify("lsp: fallo en setup de " .. server, vim.log.levels.WARN)
-    end
+    if not ok then vim.notify("lsp: fallo en setup de " .. server, vim.log.levels.WARN) end
   elseif type(entry) == "function" then
-    -- API muy antigua: algunos servers eran funciones
     local ok = pcall(entry, opts)
-    if not ok then
-      vim.notify("lsp: fallo en setup(fn) de " .. server, vim.log.levels.WARN)
-    end
+    if not ok then vim.notify("lsp: fallo en setup(fn) de " .. server, vim.log.levels.WARN) end
   end
 end
 
--- Reglas por servidor (evita duplicar TS en Angular y limita memoria)
+-- ---- Lista de servidores deseados ---------------------------------------
+local servers = { TS_NAME, "lua_ls", "pyright", "html", "cssls", "tailwindcss", "angularls", "gopls", "sqlls" }
+if mlsp_ok then mason_lsp.setup({ ensure_installed = servers }) end
+
+-- ---- Config por servidor -------------------------------------------------
 local function setup_server(server)
+  -- base
   local opts = {
     capabilities = capabilities,
     on_attach = on_attach,
@@ -81,13 +96,9 @@ local function setup_server(server)
   if server == TS_NAME then
     opts.root_dir = ts_root
     opts.cmd_env = { NODE_OPTIONS = NODE_MEM_LIMIT }
-    -- Recortes extra para tsserver
     opts.init_options = {
       hostInfo = "neovim",
-      tsserver = {
-        maxTsServerMemory = 1024,
-        logVerbosity = "off",
-      },
+      tsserver = { maxTsServerMemory = 1024, logVerbosity = "off" },
       preferences = {
         includeCompletionsForModuleExports = false,
         includeCompletionsForImportStatements = false,
@@ -101,11 +112,9 @@ local function setup_server(server)
         includeInlayEnumMemberValueHints = false,
       },
     }
-    -- No arranques TS estándar cuando el root sea Angular
+    -- No arrancar TS normal en proyectos Angular
     opts.on_new_config = function(new_cfg, root_dir)
-      if angular_root(root_dir) then
-        new_cfg.enabled = false
-      end
+      if angular_root(root_dir) then new_cfg.enabled = false end
     end
 
   elseif server == "angularls" then
@@ -116,12 +125,30 @@ local function setup_server(server)
 
   elseif server == "tailwindcss" then
     opts.filetypes = { "html","css","scss","typescriptreact","javascriptreact","svelte","vue","astro" }
+
+  elseif server == "gopls" then
+    -- Evita múltiples instancias y bucles de reinicio
+    if vim.fn.executable("go") ~= 1 or vim.fn.executable("gopls") ~= 1 then
+      vim.notify("gopls deshabilitado: no se encontró 'go' o 'gopls' en PATH", vim.log.levels.WARN)
+      return
+    end
+    opts.filetypes = { "go", "gomod", "gowork", "gotmpl" }
+    opts.single_file_support = false
+    opts.root_dir = go_root
+    opts.settings = {
+      gopls = {
+        staticcheck = true,
+        analyses = { unusedparams = true, unreachable = true },
+        directoryFilters = { "-.git", "-node_modules", "-dist", "-bin" },
+        -- memoryMode = "DegradeClosed", -- opcional
+      },
+    }
   end
 
   safe_setup(server, opts)
 end
 
--- Usar setup_handlers si existe; si no, fallback
+-- ---- Registro via mason-lspconfig (o fallback) ---------------------------
 if mlsp_ok and type(mason_lsp.setup_handlers) == "function" then
   mason_lsp.setup_handlers({
     function(server) setup_server(server) end
@@ -130,7 +157,7 @@ else
   for _, s in ipairs(servers) do setup_server(s) end
 end
 
--- Emmet aparte (si está disponible)
+-- ---- Emmet (opcional, si está instalado) ---------------------------------
 if lspconfig.emmet_ls then
   safe_setup("emmet_ls", {
     capabilities = capabilities,
@@ -142,39 +169,21 @@ if lspconfig.emmet_ls then
   })
 end
 
--- Diagnósticos (ya usabas este bloque; lo conservo)
+-- ---- Diagnósticos --------------------------------------------------------
 vim.diagnostic.config({
-  virtual_text = true,         -- nada al final de la línea
-  signs = true,                 -- iconos en el gutter
-  underline = true,             -- subrayado en la zona con error
+  virtual_text = true,
+  signs = true,
+  underline = true,
   update_in_insert = false,
   severity_sort = true,
-  float = {
-    border = "rounded",
-    source = "if_many",
-    focusable = false,
-  } 
+  float = { border = "rounded", source = "if_many", focusable = false },
 })
 
--- Popup automático bajo el cursor
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-  callback = function()
-    vim.diagnostic.open_float(nil, {
-      focusable = false,
-      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-      border = "rounded",
-      source = "always",
-      scope = "cursor",
-      prefix = "",
-    })
-  end,
-})
-
--- Ajuste del retraso del CursorHold (ms)
-vim.o.updatetime = 300
-
--- Atajo opcional para abrir el float a demanda
+-- Atajo para abrir el float a demanda
 vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float(nil, { border = 'rounded', scope = 'cursor' })
 end, { desc = "Mostrar diagnóstico flotante" })
+
+-- Reduce latencia del CursorHold
+vim.o.updatetime = 300
 
