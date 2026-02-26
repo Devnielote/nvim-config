@@ -39,6 +39,7 @@ return require('packer').startup(function(use)
   use "hrsh7th/cmp-nvim-lsp"
   -- Snippets
   use "L3MON4D3/LuaSnip"
+  use "saadparwaiz1/cmp_luasnip"
   -- Vimwiki
   use 'vimwiki/vimwiki'
 
@@ -50,6 +51,12 @@ return require('packer').startup(function(use)
     end
   }
   use 'windwp/nvim-ts-autotag'
+
+  -- Depuración genérica 
+  use "mfussenegger/nvim-dap"
+
+  -- Depuración para Go 
+  use "leoluz/nvim-dap-go"
 
   -- Testing
   use {
@@ -63,6 +70,11 @@ return require('packer').startup(function(use)
   }
 }
 
+  -- Herramientas para bases de datos 
+  use "tpope/vim-dadbod"
+  use "kristijanhusak/vim-dadbod-ui"
+  use "kristijanhusak/vim-dadbod-completion"
+  use 'rcarriga/nvim-dap-ui'
   -- Linters
   use "nvimtools/none-ls.nvim"
   use 'kylechui/nvim-surround'
@@ -87,4 +99,5 @@ return require('packer').startup(function(use)
   use 'MunifTanjim/prettier.nvim'
 
 end)
+
 
