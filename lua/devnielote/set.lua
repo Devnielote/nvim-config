@@ -34,3 +34,4 @@ vim.g.mapleader = " "
 vim.opt.foldmethod = "syntax"
 vim.opt.foldlevel = 99
 vim.opt.foldenable = true
+vim.opt.signcolumn = "yes"
