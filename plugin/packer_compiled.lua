@@ -90,6 +90,12 @@ _G.packer_plugins = {
     path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["aerial.nvim"] = {
+    config = { "\27LJ\2\n£\4\0\0\6\0\22\0%6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0024\3\0\0=\3\b\2B\0\2\0016\0\t\0009\0\n\0009\0\v\0'\2\f\0'\3\r\0'\4\14\0005\5\15\0B\0\5\0016\0\t\0009\0\n\0009\0\v\0'\2\f\0'\3\16\0'\4\17\0005\5\18\0B\0\5\0016\0\t\0009\0\n\0009\0\v\0'\2\f\0'\3\19\0'\4\20\0005\5\21\0B\0\5\1K\0\1\0\1\0\1\tdesc\22S√≠mbolo anterior\24<cmd>AerialPrev<CR>\a[s\1\0\1\tdesc\23Siguiente s√≠mbolo\24<cmd>AerialNext<CR>\a]s\1\0\1\tdesc\18Toggle Aerial\27<cmd>AerialToggle!<CR>\14<leader>a\6n\bset\vkeymap\bvim\27close_automatic_events\vlayout\1\0\2\22default_direction\nright\14min_width\3\30\rbackends\1\0\6\vlayout\0\27close_automatic_events\0\16attach_mode\vwindow\16filter_kind\1\16show_guides\2\rbackends\0\1\5\0\0\blsp\15treesitter\rmarkdown\bman\nsetup\vaerial\frequire\0" },
+    loaded = true,
+    path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/aerial.nvim",
+    url = "https://github.com/stevearc/aerial.nvim"
+  },
   catppuccin = {
     loaded = true,
     path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/catppuccin",
@@ -104,6 +110,20 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
+  },
+  ["copilot.lua"] = {
+    config = { "\27LJ\2\nÈ\2\0\0\5\0\f\0\0156\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0005\4\a\0=\4\b\3=\3\t\0025\3\n\0=\3\v\2B\0\2\1K\0\1\0\14filetypes\1\0\t\rhgcommit\1\rmarkdown\2\tyaml\2\14gitcommit\2\thelp\1\6.\1\bsvn\1\14gitrebase\1\bcvs\1\15suggestion\vkeymap\1\0\6\16accept_word\1\16accept_line\1\vaccept\n<M-l>\tprev\n<M-[>\tnext\n<M-]>\fdismiss\n<C-]>\1\0\4\fenabled\2\rdebounce\3K\17auto_trigger\2\vkeymap\0\npanel\1\0\3\npanel\0\14filetypes\0\15suggestion\0\1\0\1\fenabled\1\nsetup\fcopilot\frequire\0" },
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/home/danielfc36/.local/share/nvim/site/pack/packer/opt/copilot.lua",
+    url = "https://github.com/zbirenbaum/copilot.lua"
+  },
+  ["gitsigns.nvim"] = {
+    config = { "\27LJ\2\n®\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0005\3\4\0=\3\5\2B\0\2\1K\0\1\0\28current_line_blame_opts\1\0\2\ndelay\3¨\2\18virt_text_pos\beol\1\0\2\28current_line_blame_opts\0\23current_line_blame\2\nsetup\rgitsigns\frequire\0" },
+    loaded = true,
+    path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
+    url = "https://github.com/lewis6991/gitsigns.nvim"
   },
   harpoon = {
     loaded = true,
@@ -135,6 +155,16 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/neotest",
     url = "https://github.com/nvim-neotest/neotest"
+  },
+  ["neotest-go"] = {
+    loaded = true,
+    path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/neotest-go",
+    url = "https://github.com/nvim-neotest/neotest-go"
+  },
+  ["neotest-jest"] = {
+    loaded = true,
+    path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/neotest-jest",
+    url = "https://github.com/haydenmeade/neotest-jest"
   },
   ["neotest-vitest"] = {
     loaded = true,
@@ -199,6 +229,11 @@ _G.packer_plugins = {
     path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/nvim-ts-autotag",
     url = "https://github.com/windwp/nvim-ts-autotag"
   },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/home/danielfc36/.local/share/nvim/site/pack/packer/start/packer.nvim",
@@ -261,15 +296,23 @@ time([[Defining packer_plugins]], false)
 time([[Config for json-to-types.nvim]], true)
 try_loadstring("\27LJ\2\n?\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\18json-to-types\frequire\0", "config", "json-to-types.nvim")
 time([[Config for json-to-types.nvim]], false)
+-- Config for: gitsigns.nvim
+time([[Config for gitsigns.nvim]], true)
+try_loadstring("\27LJ\2\n®\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0005\3\4\0=\3\5\2B\0\2\1K\0\1\0\28current_line_blame_opts\1\0\2\ndelay\3¨\2\18virt_text_pos\beol\1\0\2\28current_line_blame_opts\0\23current_line_blame\2\nsetup\rgitsigns\frequire\0", "config", "gitsigns.nvim")
+time([[Config for gitsigns.nvim]], false)
 -- Config for: Comment.nvim
 time([[Config for Comment.nvim]], true)
 try_loadstring("\27LJ\2\n5\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\fComment\frequire\0", "config", "Comment.nvim")
 time([[Config for Comment.nvim]], false)
+-- Config for: aerial.nvim
+time([[Config for aerial.nvim]], true)
+try_loadstring("\27LJ\2\n£\4\0\0\6\0\22\0%6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0024\3\0\0=\3\b\2B\0\2\0016\0\t\0009\0\n\0009\0\v\0'\2\f\0'\3\r\0'\4\14\0005\5\15\0B\0\5\0016\0\t\0009\0\n\0009\0\v\0'\2\f\0'\3\16\0'\4\17\0005\5\18\0B\0\5\0016\0\t\0009\0\n\0009\0\v\0'\2\f\0'\3\19\0'\4\20\0005\5\21\0B\0\5\1K\0\1\0\1\0\1\tdesc\22S√≠mbolo anterior\24<cmd>AerialPrev<CR>\a[s\1\0\1\tdesc\23Siguiente s√≠mbolo\24<cmd>AerialNext<CR>\a]s\1\0\1\tdesc\18Toggle Aerial\27<cmd>AerialToggle!<CR>\14<leader>a\6n\bset\vkeymap\bvim\27close_automatic_events\vlayout\1\0\2\22default_direction\nright\14min_width\3\30\rbackends\1\0\6\vlayout\0\27close_automatic_events\0\16attach_mode\vwindow\16filter_kind\1\16show_guides\2\rbackends\0\1\5\0\0\blsp\15treesitter\rmarkdown\bman\nsetup\vaerial\frequire\0", "config", "aerial.nvim")
+time([[Config for aerial.nvim]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Event lazy-loads
 time([[Defining lazy-load event autocommands]], true)
-vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'nvim-autopairs'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'copilot.lua', 'nvim-autopairs'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
 time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")
 

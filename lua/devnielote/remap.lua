@@ -3,8 +3,8 @@ vim.keymap.set("n", "<leader>cp", vim.cmd.Ex)
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "J","mzJ`z")
-vim.keymap.set("n","<C-d>","<C-d>,zz")
-vim.keymap.set("n","<C-u>","<C-u>,zz")
+vim.keymap.set("n","<C-d>","<C-d>zz")
+vim.keymap.set("n","<C-u>","<C-u>zz")
 vim.keymap.set("n","n", "nzzzv")
 vim.keymap.set("n","N", "Nzzzv")
 vim.keymap.set("x","<leader>p", "\"_dP");
@@ -25,7 +25,6 @@ vim.keymap.set("n", "<leader>R", runner.run_custom,        { desc = "Run custom 
 vim.keymap.set("n", "<leader>t", runner.toggle_term,       { desc = "Toggle runner terminal" })
 
 -- Gomod autofill
-vim.keymap.set("n", "<leader>gm", ":GomodFill<CR>", { silent = true, noremap = true })
 vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
 vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
 vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
@@ -34,6 +33,9 @@ vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() e
 vim.keymap.set('n', '<leader>B', function() require('dap').set_breakpoint(vim.fn.input('Condición: ')) end)
 vim.keymap.set('n', '<leader>di', function() require('dap').step_into() end, { desc = 'DAP step into' })
 
+-- References
+vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references<cr>")
+
 
 -- Exit terminal mode 
-vim.keymap.set("i", "<C-n>", ":tnoremap")
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, silent = true, desc = "Exit terminal mode" })

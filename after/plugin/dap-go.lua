@@ -25,7 +25,7 @@ local function go_cron_program()
   if vim.fn.isdirectory(cmd_app) == 1 then
     return cmd_app
   end
-  return vim.fn.input("Ruta del scheduler (paquete/binario Go)", cmd .. "/cmd/scheduler", "file")
+  return vim.fn.input("Ruta del scheduler (paquete/binario Go)", cwd .. "/cmd/scheduler", "file")
 end
 
 local function go_worker_program()
@@ -34,7 +34,7 @@ local function go_worker_program()
   if vim.fn.isdirectory(cmd_app) == 1 then
     return cmd_app
   end
-  return vim.fn.input("Ruta del worker (paquete/binario Go)", cmd .. "/cmd/worker", "file")
+  return vim.fn.input("Ruta del worker (paquete/binario Go)", cwd .. "/cmd/worker", "file")
 end
 
 
@@ -44,6 +44,12 @@ dapgo.setup({
     initialize_timeout_sec = 20,
   },
 })
+
+local function safe_dapui_open()
+  vim.defer_fn(function()
+    pcall(dapui.open)
+  end, 500)
+end
 
 -- Configs Go (evitamos apuntar a un fichero suelto que no sea ejecutable)
 local go_configs = {
@@ -74,13 +80,13 @@ dap.configurations.go = go_configs
 
 -- Abrir/cerrar UI automáticamente cuando empiezas/terminas debug
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
+  safe_dapui_open(3)
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
+  pcall(dapui.close)
 end
 dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
+  pcall(dapui.close)
 end
 
 -- Config específica para backend Go (reutiliza la ruta principal anterior)
@@ -125,3 +131,4 @@ vim.api.nvim_create_user_command("DebugWorker", function()
   require("dap").run(worker_config)
 end, {})
 
+vim.keymap.set("n", "<leader>du", function() pcall(dapui.toggle) end, { desc = "DAP: toggle UI" })
