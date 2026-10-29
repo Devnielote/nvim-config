@@ -38,7 +38,28 @@ local function go_worker_program()
 end
 
 
-dapui.setup()
+dapui.setup({
+  layouts = {
+    {
+      elements = {
+        { id = "scopes", size = 0.35 },
+        { id = "breakpoints", size = 0.20 },
+        { id = "stacks", size = 0.25 },
+        { id = "watches", size = 0.20 },
+      },
+      size = 40,
+      position = "left",
+    },
+    {
+      elements = {
+        { id = "repl", size = 0.5 },
+        { id = "console", size = 0.5 },
+      },
+      size = 12,
+      position = "bottom",
+    },
+  },
+})
 dapgo.setup({
   delve = {
     initialize_timeout_sec = 20,
@@ -47,7 +68,7 @@ dapgo.setup({
 
 local function safe_dapui_open()
   vim.defer_fn(function()
-    pcall(dapui.open)
+    pcall(dapui.open, { reset = true })
   end, 500)
 end
 

@@ -21,6 +21,26 @@ return require('packer').startup(function(use)
   }
 
   use {
+    "sainnhe/gruvbox-material"
+  }
+
+  use {
+    "nyoom-engineering/oxocarbon.nvim"
+  }
+
+  use {
+    "EdenEast/nightfox.nvim"
+  }
+
+  use {
+    "sainnhe/sonokai"
+  }
+
+  use {
+    "folke/tokyonight.nvim"
+  }
+
+  use {
     "folke/which-key.nvim"
   }
 
@@ -74,6 +94,7 @@ return require('packer').startup(function(use)
 
   -- Depuración para Go 
   use "leoluz/nvim-dap-go"
+  use "mfussenegger/nvim-dap-python"
 
   -- Testing
   use {
@@ -154,6 +175,7 @@ return require('packer').startup(function(use)
 
   use {
   "stevearc/aerial.nvim",
+  branch = "nvim-0.11",
   requires = {
     "nvim-treesitter/nvim-treesitter",
     "nvim-tree/nvim-web-devicons"
@@ -181,5 +203,20 @@ return require('packer').startup(function(use)
     "nvim-neotest/neotest-go",
     }
 
+
+
+use {
+    "elixir-editors/vim-elixir"
+  }
+
+
+use {
+    "jfpedroza/neotest-elixir",
+    requires = {
+      "nvim-neotest/neotest-go",
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    }
+  }
 
 end)
